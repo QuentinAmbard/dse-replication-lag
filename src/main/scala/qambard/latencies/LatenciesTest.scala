@@ -25,7 +25,7 @@ class ResultCallback(startInsertTime: Long, startQueryTime: Long) extends Future
 
   override def onSuccess(result: ResultSet): Unit = {
     if(!rowSelected) {
-      rowSelected = true
+      LatenciesTest.rowSelected = true
       val time = System.nanoTime()
       val selectTime = time - startQueryTime
       val replicationTime = time - startInsertTime - selectTime / 2
@@ -99,8 +99,6 @@ object LatenciesTest extends App {
       val rdText = randomStr(4000)
       val startTime = System.nanoTime()
       sessionDC1.executeAsync(insertSt.bind(uuid, rdText))
-      //val insertTime = System.nanoTime() - startTime
-      var selectTime = 0L
 
       val futures = ArrayBuffer[ResultSetFuture]()
       while (!rowSelected) {
